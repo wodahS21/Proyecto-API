@@ -42,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   cardProvider: cardProvider,
                 )
               : const Center(
-                  child: CircularProgressIndicator(),
+                  child: Image(image: AssetImage('assets/images/pikachu.gif')),
                 ),
         ));
   }
@@ -53,9 +53,16 @@ class CardList extends StatelessWidget {
   final CardProvider cardProvider;
   @override
   Widget build(BuildContext context) {
-    return GridView.builder(
-        gridDelegate:
-            SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
+    return Container(
+      color: Color.fromARGB(
+          255, 14, 157, 228), // Cambia este color por el que desees
+      child: GridView.builder(
+        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: 1,
+          childAspectRatio: 0.90,
+          mainAxisSpacing: 10,
+          crossAxisSpacing: 10,
+        ),
         itemCount: cardProvider.cards.length,
         itemBuilder: (context, index) {
           final card = cardProvider.cards[index];
@@ -64,19 +71,34 @@ class CardList extends StatelessWidget {
               context.go('/card', extra: card);
             },
             child: Card(
-                child: Column(
-              children: [
-                Text(card.legalities!.unlimited!),
-                FadeInImage(
+              child: Column(
+                children: [
+                  FadeInImage(
                     placeholder: const AssetImage('assets/images/pikachu.gif'),
-                    image: NetworkImage(card.images!.small!)),
+                    image: NetworkImage(card.images!.small!),
+                  ),
+                  Text('ID: ' + card.id!),
+                  Text('Pokemon: ' + card.name!),
+                  Text('Artista: ' + card.artist!),
+                  Text('Artista: ' + card.regulationMark.toString()),
 
-                Text(card.name!),
-                Text(card.artist!),
-                // FadeInImage(placeholder: 'assets/images/pikachu.gif', image: NetworkImage(card.images?.small!))
-              ],
-            )),
+                  Text(card.evolvesFrom ?? 'Primer Forma'),
+                  Text(
+                    card.evolvesTo != null
+                        ? card.evolvesTo
+                            .toString()
+                            .replaceAll('[', '')
+                            .replaceAll(']', '')
+                        : "última evolución",
+                  ),
+
+                  // FadeInImage(placeholder: 'assets/images/pikachu.gif', image: NetworkImage(card.images?.small!))
+                ],
+              ),
+            ),
           );
-        });
+        },
+      ),
+    );
   }
 }

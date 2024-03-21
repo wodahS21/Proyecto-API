@@ -11,7 +11,6 @@ class CardProvider with ChangeNotifier {
     final result = await http.get(Uri.https(url, "/v2/cards"));
     final response = cardsResposeFromJson(result.body);
     cards.addAll(response.data!);
-    print(response.data);
     notifyListeners();
   }
 }
