@@ -23,20 +23,36 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
         appBar: AppBar(
           foregroundColor: Color.fromARGB(255, 0, 0, 0),
-          backgroundColor: Color.fromARGB(255, 255, 0, 0),
-          title: const Text("Centro Pokemon"),
+          backgroundColor: Color.fromARGB(255, 247, 4, 4),
+          title: const Text(
+            "Centro Pokémon",
+            style: TextStyle(
+              color: Color.fromARGB(255, 255, 255, 255), // Color del texto
+              fontSize: 20, // Tamaño del texto
+              fontWeight: FontWeight.bold, // Negrita
+              fontStyle: FontStyle.italic, // Itálica
+              letterSpacing: 1.5, // Espaciado entre letras
+              shadows: [
+                Shadow(
+                    color: Color.fromARGB(255, 0, 0, 0),
+                    offset: Offset(2, 2),
+                    blurRadius: 3)
+              ], // Sombra del texto
+            ),
+          ),
           centerTitle: true,
           actions: [
             IconButton(
-                onPressed: () {},
-                icon: const Icon(Icons.admin_panel_settings_rounded),
-                color: Colors.lightBlueAccent.shade400),
+              onPressed: () {},
+              icon: Icon(Icons.admin_panel_settings_rounded),
+              color: Colors.lightBlueAccent.shade400,
+            ),
           ],
         ),
         body: Container(
           height: double.infinity,
           width: double.infinity,
-          color: Color.fromARGB(255, 0, 255, 255),
+          color: Color.fromARGB(255, 39, 2, 107),
           child: cardProvider.cards.isNotEmpty
               ? CardList(
                   cardProvider: cardProvider,
@@ -55,7 +71,7 @@ class CardList extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       color: Color.fromARGB(
-          255, 14, 157, 228), // Cambia este color por el que desees
+          255, 6, 172, 238), // Cambia este color por el que desees
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
@@ -77,12 +93,66 @@ class CardList extends StatelessWidget {
                     placeholder: const AssetImage('assets/images/pikachu.gif'),
                     image: NetworkImage(card.images!.small!),
                   ),
-                  Text('ID: ' + card.id!),
-                  Text('Pokemon: ' + card.name!),
-                  Text('Artista: ' + card.artist!),
-                  Text('Artista: ' + card.regulationMark.toString()),
-
-                  Text(card.evolvesFrom ?? 'Primer Forma'),
+                  Text(
+                    'ID: ' + card.id!,
+                    style: const TextStyle(
+                      color: Colors.black, // Color del texto
+                      fontWeight: FontWeight.bold, // Negrita
+                      fontStyle: FontStyle.italic, // Itálica
+                      letterSpacing: 0.5, // Espaciado entre letras
+                      shadows: [
+                        Shadow(
+                            color: Colors.grey,
+                            offset: Offset(1, 1),
+                            blurRadius: 2)
+                      ], // Sombra del texto
+                    ),
+                  ),
+                  Text(
+                    'Pokemon: ' + card.name!,
+                    style: const TextStyle(
+                      color: Colors.black87, // Color del texto
+                      fontWeight: FontWeight.bold, // Negrita
+                      fontStyle: FontStyle.italic, // Itálica
+                      letterSpacing: 0.5, // Espaciado entre letras
+                      shadows: [
+                        Shadow(
+                            color: Colors.grey,
+                            offset: Offset(1, 1),
+                            blurRadius: 2)
+                      ], // Sombra del texto
+                    ),
+                  ),
+                  Text(
+                    'Artista: ' + card.artist!,
+                    style: const TextStyle(
+                      color: Colors.black87, // Color del texto
+                      fontWeight: FontWeight.bold, // Negrita
+                      fontStyle: FontStyle.italic, // Itálica
+                      letterSpacing: 0.5, // Espaciado entre letras
+                      shadows: [
+                        Shadow(
+                            color: Colors.grey,
+                            offset: Offset(1, 1),
+                            blurRadius: 2)
+                      ], // Sombra del texto
+                    ),
+                  ),
+                  Text(
+                    card.evolvesFrom ?? 'Primer Forma',
+                    style: const TextStyle(
+                      color: Colors.black, // Color del texto
+                      fontWeight: FontWeight.bold, // Negrita
+                      fontStyle: FontStyle.italic, // Itálica
+                      letterSpacing: 0.5, // Espaciado entre letras
+                      shadows: [
+                        Shadow(
+                            color: Colors.grey,
+                            offset: Offset(1, 1),
+                            blurRadius: 2)
+                      ], // Sombra del texto
+                    ),
+                  ),
                   Text(
                     card.evolvesTo != null
                         ? card.evolvesTo
@@ -90,6 +160,18 @@ class CardList extends StatelessWidget {
                             .replaceAll('[', '')
                             .replaceAll(']', '')
                         : "última evolución",
+                    style: const TextStyle(
+                      color: Colors.black, // Color del texto
+                      fontWeight: FontWeight.bold, // Negrita
+                      fontStyle: FontStyle.italic, // Itálica
+                      letterSpacing: 0.5, // Espaciado entre letras
+                      shadows: [
+                        Shadow(
+                            color: Colors.grey,
+                            offset: Offset(1, 1),
+                            blurRadius: 2)
+                      ], // Sombra del texto
+                    ),
                   ),
 
                   // FadeInImage(placeholder: 'assets/images/pikachu.gif', image: NetworkImage(card.images?.small!))
