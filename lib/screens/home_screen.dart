@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:poketcg/provider/card_provider.dart';
+import 'package:poketcg/screens/card_screen.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -18,64 +18,47 @@ class _HomeScreenState extends State<HomeScreen> {
     cardProvider.getCards();
   }
 
+  @override
   Widget build(BuildContext context) {
     final cardProvider = Provider.of<CardProvider>(context);
     return Scaffold(
-        appBar: AppBar(
-          foregroundColor: Color.fromARGB(255, 0, 0, 0),
-          backgroundColor: Color.fromARGB(255, 247, 4, 4),
-          title: const Text(
-            "Centro Pokémon",
-            style: TextStyle(
-              color: Color.fromARGB(255, 255, 255, 255), // Color del texto
-              fontSize: 20, // Tamaño del texto
-              fontWeight: FontWeight.bold, // Negrita
-              fontStyle: FontStyle.italic, // Itálica
-              letterSpacing: 1.5, // Espaciado entre letras
-              shadows: [
-                Shadow(
-                    color: Color.fromARGB(255, 0, 0, 0),
-                    offset: Offset(2, 2),
-                    blurRadius: 3)
-              ], // Sombra del texto
-            ),
+      appBar: AppBar(
+        title: const Text('Centro Pokémon'),
+        centerTitle: true,
+        backgroundColor: Color.fromARGB(255, 255, 0, 0),
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.admin_panel_settings_rounded),
+            color: Color.fromARGB(255, 0, 0, 0),
           ),
-          centerTitle: true,
-          actions: [
-            IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.admin_panel_settings_rounded),
-              color: Colors.lightBlueAccent.shade400,
-            ),
-          ],
-        ),
-        body: Container(
-          height: double.infinity,
-          width: double.infinity,
-          color: Color.fromARGB(255, 39, 2, 107),
-          child: cardProvider.cards.isNotEmpty
-              ? CardList(
-                  cardProvider: cardProvider,
-                )
-              : const Center(
-                  child: Image(image: AssetImage('assets/images/pikachu.gif')),
-                ),
-        ));
+        ],
+      ),
+      body: Container(
+        height: double.infinity,
+        width: double.infinity,
+        child: cardProvider.cards.isNotEmpty
+            ? CardList(cardProvider: cardProvider)
+            : const Center(
+                child: Image(image: AssetImage('assets/images/pikachu.gif')),
+              ),
+      ),
+    );
   }
 }
 
 class CardList extends StatelessWidget {
-  const CardList({super.key, required this.cardProvider});
+  const CardList({Key? key, required this.cardProvider}) : super(key: key);
   final CardProvider cardProvider;
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Color.fromARGB(
-          255, 6, 172, 238), // Cambia este color por el que desees
+      color: const Color.fromARGB(255, 6, 172, 238),
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 1,
-          childAspectRatio: 0.90,
+          childAspectRatio: 0.88,
           mainAxisSpacing: 10,
           crossAxisSpacing: 10,
         ),
@@ -84,103 +67,150 @@ class CardList extends StatelessWidget {
           final card = cardProvider.cards[index];
           return GestureDetector(
             onTap: () {
-              context.go('/card', extra: card);
+              Navigator.pushNamed(context, '/second', arguments: card);
             },
             child: Card(
-              child: Column(
-                children: [
-                  FadeInImage(
-                    placeholder: const AssetImage('assets/images/pikachu.gif'),
-                    image: NetworkImage(card.images!.small!),
-                  ),
-                  Text(
-                    'ID: ' + card.id!,
-                    style: const TextStyle(
-                      color: Colors.black, // Color del texto
-                      fontWeight: FontWeight.bold, // Negrita
-                      fontStyle: FontStyle.italic, // Itálica
-                      letterSpacing: 0.5, // Espaciado entre letras
-                      shadows: [
-                        Shadow(
-                            color: Colors.grey,
-                            offset: Offset(1, 1),
-                            blurRadius: 2)
-                      ], // Sombra del texto
+              child: Container(
+                // Envolver el Column con un Container
+                color: getColorForType(
+                    card.types!.first), // Cambiar el color de fondo aquí
+                child: Column(
+                  children: [
+                    const SizedBox(
+                      height: 15,
                     ),
-                  ),
-                  Text(
-                    'Pokemon: ' + card.name!,
-                    style: const TextStyle(
-                      color: Colors.black87, // Color del texto
-                      fontWeight: FontWeight.bold, // Negrita
-                      fontStyle: FontStyle.italic, // Itálica
-                      letterSpacing: 0.5, // Espaciado entre letras
-                      shadows: [
-                        Shadow(
-                            color: Colors.grey,
-                            offset: Offset(1, 1),
-                            blurRadius: 2)
-                      ], // Sombra del texto
+                    FadeInImage(
+                      placeholder:
+                          const AssetImage('assets/images/pikachu.gif'),
+                      image: NetworkImage(card.images!.small!),
                     ),
-                  ),
-                  Text(
-                    'Artista: ' + card.artist!,
-                    style: const TextStyle(
-                      color: Colors.black87, // Color del texto
-                      fontWeight: FontWeight.bold, // Negrita
-                      fontStyle: FontStyle.italic, // Itálica
-                      letterSpacing: 0.5, // Espaciado entre letras
-                      shadows: [
-                        Shadow(
-                            color: Colors.grey,
-                            offset: Offset(1, 1),
-                            blurRadius: 2)
-                      ], // Sombra del texto
+                    Text(
+                      'ID: ' + card.id!,
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 0.5,
+                        shadows: [
+                          Shadow(
+                              color: Colors.grey,
+                              offset: Offset(1, 1),
+                              blurRadius: 2)
+                        ],
+                      ),
                     ),
-                  ),
-                  Text(
-                    card.evolvesFrom ?? 'Primer Forma',
-                    style: const TextStyle(
-                      color: Colors.black, // Color del texto
-                      fontWeight: FontWeight.bold, // Negrita
-                      fontStyle: FontStyle.italic, // Itálica
-                      letterSpacing: 0.5, // Espaciado entre letras
-                      shadows: [
-                        Shadow(
-                            color: Colors.grey,
-                            offset: Offset(1, 1),
-                            blurRadius: 2)
-                      ], // Sombra del texto
+                    Text(
+                      'Pokemon: ' + card.name!,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 0.5,
+                        shadows: [
+                          Shadow(
+                              color: Colors.grey,
+                              offset: Offset(1, 1),
+                              blurRadius: 2)
+                        ],
+                      ),
                     ),
-                  ),
-                  Text(
-                    card.evolvesTo != null
-                        ? card.evolvesTo
-                            .toString()
-                            .replaceAll('[', '')
-                            .replaceAll(']', '')
-                        : "última evolución",
-                    style: const TextStyle(
-                      color: Colors.black, // Color del texto
-                      fontWeight: FontWeight.bold, // Negrita
-                      fontStyle: FontStyle.italic, // Itálica
-                      letterSpacing: 0.5, // Espaciado entre letras
-                      shadows: [
-                        Shadow(
-                            color: Colors.grey,
-                            offset: Offset(1, 1),
-                            blurRadius: 2)
-                      ], // Sombra del texto
+                    Text(
+                      'Artista: ' + card.artist!,
+                      style: const TextStyle(
+                        color: Colors.black87,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 0.5,
+                        shadows: [
+                          Shadow(
+                              color: Colors.grey,
+                              offset: Offset(1, 1),
+                              blurRadius: 2)
+                        ],
+                      ),
                     ),
-                  ),
-
-                  // FadeInImage(placeholder: 'assets/images/pikachu.gif', image: NetworkImage(card.images?.small!))
-                ],
+                    Text(
+                      card.evolvesFrom ?? 'Primer Forma',
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 0.5,
+                        shadows: [
+                          Shadow(
+                              color: Colors.grey,
+                              offset: Offset(1, 1),
+                              blurRadius: 2)
+                        ],
+                      ),
+                    ),
+                    Text(
+                      card.evolvesTo != null
+                          ? card.evolvesTo
+                              .toString()
+                              .replaceAll('[', '')
+                              .replaceAll(']', '')
+                          : "última evolución",
+                      style: const TextStyle(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                        fontStyle: FontStyle.italic,
+                        letterSpacing: 0.5,
+                        shadows: [
+                          Shadow(
+                              color: Colors.grey,
+                              offset: Offset(1, 1),
+                              blurRadius: 2)
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         },
       ),
     );
+  }
+}
+
+Color getColorForType(String? type) {
+  switch (type) {
+    case 'Colorless':
+      return Color.fromARGB(255, 255, 255, 255);
+
+    case 'Darkness':
+      return Color.fromARGB(255, 50, 31, 80);
+
+    case 'Dragon':
+      return Color.fromARGB(255, 69, 75, 20);
+
+    case 'Fairy':
+      return Color.fromARGB(255, 209, 2, 192);
+
+    case 'Fighting':
+      return Color.fromARGB(255, 218, 145, 11);
+
+    case 'Fire':
+      return Color.fromARGB(255, 255, 0, 0);
+
+    case 'Grass':
+      return Color.fromARGB(255, 8, 161, 3);
+
+    case 'Lightning':
+      return Color.fromARGB(255, 255, 230, 0);
+
+    case 'Metal':
+      return Color.fromARGB(255, 118, 122, 116);
+
+    case 'Psychic':
+      return Color.fromARGB(255, 165, 6, 112);
+
+    case 'Water':
+      return Color.fromARGB(255, 9, 13, 202);
+
+    default:
+      return Colors.black;
   }
 }
