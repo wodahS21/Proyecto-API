@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:poketcg/models/card_model.dart';
+import 'package:poketcg/widgets/musica.dart';
 
 class CardScreen extends StatelessWidget {
   final pokecard card;
@@ -32,7 +33,7 @@ class CardScreen extends StatelessWidget {
         return Color.fromARGB(255, 255, 230, 0);
 
       case 'Metal':
-        return Color.fromARGB(255, 118, 122, 116);
+        return Color.fromARGB(164, 112, 117, 109);
 
       case 'Psychic':
         return Color.fromARGB(255, 165, 6, 112);
@@ -116,11 +117,16 @@ class CardScreen extends StatelessWidget {
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Pokemon: ' + card.rules!.toString(),
+                    'Ataque: ${card.attacks!.first.name}'
+                    '${card.attacks!.first.text}',
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Tipo: ' + card.types!.first,
+                    '${card.attacks!.first.text}',
+                    style: getCustomTextStyle(),
+                  ),
+                  Text(
+                    'Tipo: ' + card.types!.last,
                     style: getCustomTextStyle(),
                   ),
                   FadeInImage(
