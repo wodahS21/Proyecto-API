@@ -1,11 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart'; // Importa el paquete services.dart
+
 import 'package:poketcg/models/card_model.dart';
 import 'package:poketcg/provider/card_provider.dart';
 import 'package:poketcg/screens/card_screen.dart';
 import 'package:poketcg/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 
-void main() => runApp(const MyApp());
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp, // Bloquea la orientación en modo vertical
+  ]);
+  runApp(const MyApp());
+}
 
 class MyApp extends StatelessWidget {
   const MyApp({Key? key});

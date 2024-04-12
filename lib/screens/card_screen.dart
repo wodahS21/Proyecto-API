@@ -6,57 +6,58 @@ class CardScreen extends StatelessWidget {
   final pokecard card;
   const CardScreen({Key? key, required this.card}) : super(key: key);
 
-  Color getColorForType(String? type) {
+  ImageProvider getBackgroundImageForType(String type) {
     switch (type) {
       case 'Colorless':
-        return Color.fromARGB(255, 255, 255, 255);
-
+        return NetworkImage(
+            'https://pokemongohub.net/wp-content/uploads/2019/05/Normal-Types.jpg');
       case 'Darkness':
-        return Color.fromARGB(255, 50, 31, 80);
-
+        return NetworkImage(
+            'https://i.pinimg.com/736x/4b/d1/42/4bd14212ec7c1c98a2bb820e9201e006.jpg');
       case 'Dragon':
-        return Color.fromARGB(255, 69, 75, 20);
-
+        return NetworkImage(
+            'https://pokemongohub.net/wp-content/uploads/2019/01/Dragon-Types-1.jpg');
       case 'Fairy':
-        return Color.fromARGB(255, 209, 2, 192);
-
+        return NetworkImage(
+            'https://pokemongohub.net/wp-content/uploads/2019/02/Fairy-Types-1024x576.jpg');
       case 'Fighting':
-        return Color.fromARGB(255, 218, 145, 11);
-
+        return NetworkImage(
+            'https://i.pinimg.com/originals/1a/73/1d/1a731dfeef1583caabefb12af75c621d.png');
       case 'Fire':
-        return Color.fromARGB(255, 255, 0, 0);
-
+        return NetworkImage(
+            'https://i.pinimg.com/originals/ea/49/59/ea49597d176612580fbbac7185b38dce.jpg');
       case 'Grass':
-        return Color.fromARGB(255, 8, 161, 3);
-
+        return NetworkImage(
+            'https://i.pinimg.com/originals/cd/f0/65/cdf065dd059561bfc53d34db0fda588e.jpg');
       case 'Lightning':
-        return Color.fromARGB(255, 255, 230, 0);
-
+        return NetworkImage(
+            'https://pokemongohub.net/wp-content/uploads/2019/01/Electric-Types.jpg');
       case 'Metal':
-        return Color.fromARGB(164, 112, 117, 109);
-
+        return NetworkImage(
+            'https://c4.wallpaperflare.com/wallpaper/122/545/285/pokemon-steel-pokemon-steelix-wallpaper-preview.jpg');
       case 'Psychic':
-        return Color.fromARGB(255, 165, 6, 112);
-
+        return NetworkImage(
+            'https://pokemongohub.net/wp-content/uploads/2019/01/Psychic-Types.jpg');
       case 'Water':
-        return Color.fromARGB(255, 9, 13, 202);
-
+        return NetworkImage(
+            'https://pokemongohub.net/wp-content/uploads/2019/01/Water-Types.jpg');
       default:
-        return Colors.black;
+        return NetworkImage(
+            'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSAA2AGpHBZVdrT2_HloL4HVEmo9xCLKFq76MJV3TzG2w&s'); // Imagen por defecto en caso de tipo desconocido
     }
   }
 
   TextStyle getCustomTextStyle() {
     return const TextStyle(
-      color: Colors.black,
       fontWeight: FontWeight.bold,
       fontStyle: FontStyle.italic,
-      letterSpacing: 0.5,
+      fontSize: 20.0,
+      color: Colors.black,
       shadows: [
         Shadow(
-          color: Colors.grey,
+          color: Color.fromARGB(255, 255, 255, 255),
           offset: Offset(1, 1),
-          blurRadius: 2,
+          blurRadius: 3,
         ),
       ],
     );
@@ -65,7 +66,6 @@ class CardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.blueGrey.shade600,
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.blueGrey.shade900,
@@ -82,9 +82,12 @@ class CardScreen extends StatelessWidget {
         children: [
           Card(
             child: Container(
-              // Aquí se envuelve el Column con un Container
-              color: getColorForType(card.types!
-                  .first), //obtener el color de fondo aquí dependiendo del tipo de la carta
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: getBackgroundImageForType(card.types!.first),
+                  fit: BoxFit.cover,
+                ),
+              ),
               child: Column(
                 children: [
                   FadeInImage(
@@ -92,11 +95,11 @@ class CardScreen extends StatelessWidget {
                     image: NetworkImage(card.images!.large!),
                   ),
                   Text(
-                    'ID: ' + card.id!,
+                    'ID:\n' + card.id! + '',
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Pokemon: ' + card.name!,
+                    'Pokemon:' + card.name!,
                     style: getCustomTextStyle(),
                   ),
                   Text(
@@ -117,7 +120,7 @@ class CardScreen extends StatelessWidget {
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Ataque: ${card.attacks!.first.name}'
+                    'Ataque: ${card.attacks!.first.name}\n'
                     '${card.attacks!.first.text}',
                     style: getCustomTextStyle(),
                   ),
