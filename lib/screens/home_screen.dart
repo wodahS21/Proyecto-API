@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:poketcg/provider/card_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:poketcg/screens/card_screen.dart';
+import 'package:poketcg/Services/auth_services.dart';
 import 'package:poketcg/widgets/musica.dart';
 import 'package:provider/provider.dart';
 
@@ -14,8 +15,15 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
+  void _logout(BuildContext context) async {
+    final authService = Provider.of<AuthService>(context, listen: false);
+    await authService.logout();
+    Navigator.pushReplacementNamed(context, 'login');
+  }
+
   void initState() {
     super.initState();
+
     final cardProvider = Provider.of<CardProvider>(context, listen: false);
     cardProvider.getCards();
   }
@@ -29,10 +37,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
         elevation: 0, // Quita la sombra de la AppBar
         leading: IconButton(
-          icon: Icon(Icons.menu), // Icono para mostrar el menú
-          onPressed: () {
-            // Agrega la funcionalidad para mostrar el menú aquí
-          },
+          icon: Icon(Icons.logout),
+          onPressed: () => _logout(context),
         ),
         actions: [
           IconButton(
@@ -109,7 +115,7 @@ class CardList extends StatelessWidget {
           GridView.builder(
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 1,
-              childAspectRatio: 0.88,
+              childAspectRatio: 0.80,
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
             ),
@@ -131,6 +137,25 @@ class CardList extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
+                        const SizedBox(
+                          height: 15,
+                        ),
+                        Text(
+                          '' + card.name!,
+                          style: const TextStyle(
+                            color: Color.fromARGB(255, 0, 0, 0),
+                            fontWeight: FontWeight.bold,
+                            fontStyle: FontStyle.italic,
+                            fontSize: 20,
+                            letterSpacing: 0.5,
+                            shadows: [
+                              Shadow(
+                                  color: Color.fromARGB(255, 255, 230, 0),
+                                  offset: Offset(1, 1),
+                                  blurRadius: 2)
+                            ],
+                          ),
+                        ),
                         const SizedBox(
                           height: 15,
                         ),
