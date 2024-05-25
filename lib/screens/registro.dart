@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:poketcg/Services/auth_services.dart';
 import 'package:poketcg/provider/login_form_provider.dart';
 import 'package:poketcg/ui/input_decoration.dart';
-import 'package:poketcg/widgets/card_container.dart';
 import 'package:provider/provider.dart';
 
 class RegistroPage extends StatelessWidget {
@@ -11,14 +11,46 @@ class RegistroPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
+      body: DecoratedBox(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            colors: [
+              Color.fromARGB(255, 2, 255, 36),
+              Color.fromARGB(255, 32, 77, 202),
+              Color.fromARGB(255, 255, 0, 200),
+              Color.fromARGB(255, 0, 6, 87),
+            ],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+        ),
         child: SingleChildScrollView(
           child: Column(
             children: [
               SizedBox(
                 height: 250,
               ),
-              CardContainer(
+              Container(
+                margin: EdgeInsets.all(
+                    20), // Agrega un margen alrededor del contenedor
+                padding: EdgeInsets.all(
+                    20), // Agrega un padding alrededor del contenido
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Color.fromARGB(255, 153, 0, 255),
+                      Color.fromARGB(255, 32, 77, 202),
+                    ],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+
+                  border: Border.all(
+                      width: 3, color: Colors.grey), // Agrega un borde gris
+                  borderRadius:
+                      BorderRadius.circular(10), // Agrega un borde redondeado
+                  color: Colors.white, // Agrega un fondo blanco
+                ),
                 child: Column(
                   children: [
                     SizedBox(
@@ -44,14 +76,17 @@ class RegistroPage extends StatelessWidget {
                     Navigator.pushReplacementNamed(context, 'login'),
                 style: ButtonStyle(
                     overlayColor: MaterialStateProperty.all(
-                      Colors.redAccent.withOpacity(0.1),
+                      Color.fromARGB(255, 255, 0, 0).withOpacity(0.1),
                     ),
                     shape: MaterialStateProperty.all(StadiumBorder())),
                 child: Text(
                   '¿Ya tienes una cuenta?',
                   style: TextStyle(
-                      fontSize: 18, color: Color.fromARGB(255, 0, 0, 0)),
+                      fontSize: 18, color: Color.fromARGB(255, 255, 255, 255)),
                 ),
+              ),
+              SizedBox(
+                height: MediaQuery.of(context).size.height * 0.16,
               ),
             ],
           ),
@@ -110,9 +145,9 @@ class _LoginForm extends StatelessWidget {
             MaterialButton(
                 shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10)),
-                disabledColor: Colors.grey,
+                disabledColor: Color.fromARGB(85, 82, 99, 255),
                 elevation: 0,
-                color: Colors.redAccent,
+                color: Color.fromARGB(255, 82, 99, 255),
                 child: Container(
                     padding: EdgeInsets.symmetric(horizontal: 80, vertical: 15),
                     child: Text(

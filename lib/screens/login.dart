@@ -48,8 +48,10 @@ class _LoginForm extends StatelessWidget {
               decoration: const BoxDecoration(
                 gradient: LinearGradient(
                   colors: [
-                    Color.fromARGB(255, 255, 0, 200),
-                    Color.fromARGB(255, 0, 6, 87)
+                    Color.fromARGB(255, 247, 0, 255),
+                    Color.fromARGB(255, 117, 8, 206),
+                    Color.fromARGB(255, 8, 127, 206),
+                    Color.fromARGB(255, 8, 133, 206)
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -183,7 +185,7 @@ class _LoginForm extends StatelessWidget {
                       ),
                     ),
                     SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.18,
+                      height: MediaQuery.of(context).size.height * 0.183,
                     ),
                   ],
                 ),

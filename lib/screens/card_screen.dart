@@ -1,10 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:poketcg/Services/auth_services.dart';
 import 'package:poketcg/models/card_model.dart';
 import 'package:poketcg/widgets/musica.dart';
+import 'package:provider/provider.dart';
 
-class CardScreen extends StatelessWidget {
+class CardScreen extends StatefulWidget {
   final pokecard card;
+
   const CardScreen({Key? key, required this.card}) : super(key: key);
+
+  @override
+  State<CardScreen> createState() => _CardScreenState();
+}
+
+class _CardScreenState extends State<CardScreen> {
+  bool isFavorite = false;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration.zero, () async {
+      final authService = Provider.of<AuthService>(context, listen: false);
+      final dynamic arguments = ModalRoute.of(context)!.settings.arguments;
+      // final String? userEmail = await authService.getUserId();
+
+      // if (arguments is Card && userEmail != null) {
+      //   final card = arguments;
+
+      //   // Verificar si el personaje ya está en favoritos
+      //   final exists = await authService.existeJPersonajeFavorito(
+      //       userEmail, widget.card.id!);
+
+      //   setState(() {
+      //     isFavorite = exists;
+      //   });
+      // }
+    });
+  }
 
   ImageProvider getBackgroundImageForType(String type) {
     switch (type) {
@@ -65,16 +97,19 @@ class CardScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final authService = Provider.of<AuthService>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
         backgroundColor: Colors.blueGrey.shade900,
-        title: Text(card.name!),
+        title: Text(widget.card.name!),
         actions: [
           IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.admin_panel_settings_rounded),
-            color: Colors.lightBlueAccent.shade400,
+            onPressed: () {
+              //    toggleFavorite();
+            },
+            icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
           ),
         ],
       ),
@@ -84,7 +119,7 @@ class CardScreen extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: getBackgroundImageForType(card.types!.first),
+                  image: getBackgroundImageForType(widget.card.types!.first),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -92,27 +127,27 @@ class CardScreen extends StatelessWidget {
                 children: [
                   FadeInImage(
                     placeholder: const AssetImage('assets/images/pikachu.gif'),
-                    image: NetworkImage(card.images!.large!),
+                    image: NetworkImage(widget.card.images!.large!),
                   ),
                   Text(
-                    'ID:\n' + card.id! + '',
+                    'ID:\n' + widget.card.id! + '',
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Pokemon:' + card.name!,
+                    'Pokemon:' + widget.card.name!,
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Artista: ' + card.artist!,
+                    'Artista: ' + widget.card.artist!,
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    card.evolvesFrom ?? 'Primer Forma',
+                    widget.card.evolvesFrom ?? 'Primer Forma',
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    card.evolvesTo != null
-                        ? card.evolvesTo
+                    widget.card.evolvesTo != null
+                        ? widget.card.evolvesTo
                             .toString()
                             .replaceAll('[', '')
                             .replaceAll(']', '')
@@ -120,21 +155,21 @@ class CardScreen extends StatelessWidget {
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Ataque: ${card.attacks!.first.name}\n'
-                    '${card.attacks!.first.text}',
+                    'Ataque: ${widget.card.attacks!.first.name}\n'
+                    '${widget.card.attacks!.first.text}',
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    '${card.attacks!.first.text}',
+                    '${widget.card.nationalPokedexNumbers!}',
                     style: getCustomTextStyle(),
                   ),
                   Text(
-                    'Tipo: ' + card.types!.last,
+                    'Tipo: ' + widget.card.types!.last,
                     style: getCustomTextStyle(),
                   ),
                   FadeInImage(
                     placeholder: const AssetImage('assets/images/pikachu.gif'),
-                    image: NetworkImage(card.pokecardSet!.images!.logo!),
+                    image: NetworkImage(widget.card.pokecardSet!.images!.logo!),
                   ),
                 ],
               ),
@@ -144,4 +179,46 @@ class CardScreen extends StatelessWidget {
       ),
     );
   }
+
+  // void toggleFavorite() async {
+  //   final authService = Provider.of<AuthService>(context, listen: false);
+  //   final dynamic arguments = ModalRoute.of(context)!.settings.arguments;
+
+  //   if (arguments is pokecard) {
+  //     if (widget.card.id != null) {
+  //       final String characterId = widget.card.id!;
+  //       final String? userEmail = await authService.getUserId();
+  //       if (userEmail != null) {
+  //         try {
+  //           // Verificar si el personaje ya está en favoritos
+  //           final exists = await authService.existeJPersonajeFavorito(
+  //               userEmail, characterId);
+  //           print(exists);
+
+  //           setState(() {
+  //             isFavorite = exists;
+  //           });
+
+  //           if (isFavorite) {
+  //             print('Quitando de favoritos');
+  //             await authService.eliminarPersonajeFavorito(
+  //                 userEmail, characterId);
+  //           } else if (!isFavorite) {
+  //             print('Agregando a favoritos');
+  //             await authService.agregarPersonajeFavorito(
+  //                 userEmail, characterId);
+  //           }
+  //         } catch (e) {
+  //           print('Error al manejar la lista de favoritos: $e');
+  //         }
+  //       } else {
+  //         print('El email del usuario es nulo');
+  //       }
+  //     } else {
+  //       print('El ID del personaje es nulo');
+  //     }
+  //   } else {
+  //     print('Los argumentos no son de tipo Character');
+  //   }
+  // }
 }

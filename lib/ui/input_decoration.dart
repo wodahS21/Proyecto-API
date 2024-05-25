@@ -9,7 +9,7 @@ class InputDecorations {
     return InputDecoration(
         enabledBorder: const UnderlineInputBorder(
           borderSide: BorderSide(
-            color: Colors.redAccent,
+            color: Color.fromARGB(255, 0, 0, 0),
           ),
         ),
         focusedBorder: const UnderlineInputBorder(
@@ -25,7 +25,7 @@ class InputDecorations {
         prefixIcon: prefixIcon != null
             ? Icon(
                 prefixIcon,
-                color: Colors.redAccent,
+                color: Color.fromARGB(255, 31, 243, 3),
               )
             : null);
   }
