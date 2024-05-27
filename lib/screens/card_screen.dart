@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:poketcg/Services/auth_services.dart';
 import 'package:poketcg/models/card_model.dart';
+import 'package:poketcg/models/favoritos_model.dart';
 import 'package:poketcg/widgets/musica.dart';
 import 'package:provider/provider.dart';
 
@@ -15,26 +16,23 @@ class CardScreen extends StatefulWidget {
 
 class _CardScreenState extends State<CardScreen> {
   bool isFavorite = false;
-
   @override
   void initState() {
     super.initState();
+    //  _checkFavorite();
     Future.delayed(Duration.zero, () async {
       final authService = Provider.of<AuthService>(context, listen: false);
-      final dynamic arguments = ModalRoute.of(context)!.settings.arguments;
-      // final String? userEmail = await authService.getUserId();
-
-      // if (arguments is Card && userEmail != null) {
-      //   final card = arguments;
-
-      //   // Verificar si el personaje ya está en favoritos
-      //   final exists = await authService.existeJPersonajeFavorito(
-      //       userEmail, widget.card.id!);
-
-      //   setState(() {
-      //     isFavorite = exists;
-      //   });
-      // }
+      final favorito = readFavorite(authService, widget.card.id!);
+      //
+      favorito.then((exists) {
+        for (var elements in exists!) {
+          if (elements.cardId == widget.card.id!) {
+            setState(() {
+              isFavorite = elements.fav!;
+            });
+          }
+        }
+      });
     });
   }
 
@@ -95,10 +93,53 @@ class _CardScreenState extends State<CardScreen> {
     );
   }
 
+  // void _checkFavorite() async {
+  //   final authService = Provider.of<AuthService>(context, listen: false);
+  //   final dynamic arguments = ModalRoute.of(context)!.settings.arguments;
+
+  //   if (arguments is pokecard) {
+  //     if (widget.card.id != null) {
+  //       final String characterId = widget.card.id!;
+  //       final String? userEmail = await authService.getUserId();
+
+  //       if (userEmail != null) {
+  //         try {
+  //           final favorito =
+  //               await authService.obtenerfavorito(userEmail, characterId);
+  //           setState(() {
+  //             isFavorite = favorito['data'].isNotEmpty;
+  //           });
+  //         } catch (e) {
+  //           print('Error al verificar favoritos: $e');
+  //         }
+  //       } else {
+  //         print('El email del usuario es nulo');
+  //       }
+  //     } else {
+  //       print('El ID del personaje es nulo');
+  //     }
+  //   } else {
+  //     print('Los argumentos no son de tipo Character');
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     final authService = Provider.of<AuthService>(context, listen: false);
+
+    void checkFavorite() async {
+      final cardId = widget.card.id!;
+      final favorites = await readFavorite(authService, cardId);
+      setState(() {
+        isFavorite = favorites?.any((fav) => fav.cardId == cardId) ?? false;
+      });
+    }
+
+    // Si aún no se ha verificado el favorito, hacerlo ahora
+    if (!isFavorite) {
+      checkFavorite();
+    }
     return Scaffold(
       appBar: AppBar(
         foregroundColor: Colors.white,
@@ -106,8 +147,15 @@ class _CardScreenState extends State<CardScreen> {
         title: Text(widget.card.name!),
         actions: [
           IconButton(
-            onPressed: () {
-              //    toggleFavorite();
+            onPressed: () async {
+              final cardId = widget.card.id!;
+              if (isFavorite) {
+                await deleteFavorite(authService, cardId);
+              } else {
+                await addFavorite(authService, cardId);
+              }
+              // Actualizar el valor de isFavorite y verificar de nuevo
+              checkFavorite();
             },
             icon: Icon(isFavorite ? Icons.favorite : Icons.favorite_border),
           ),
@@ -180,7 +228,7 @@ class _CardScreenState extends State<CardScreen> {
     );
   }
 
-  // void toggleFavorite() async {
+  // void _addFavorite() async {
   //   final authService = Provider.of<AuthService>(context, listen: false);
   //   final dynamic arguments = ModalRoute.of(context)!.settings.arguments;
 
@@ -188,28 +236,44 @@ class _CardScreenState extends State<CardScreen> {
   //     if (widget.card.id != null) {
   //       final String characterId = widget.card.id!;
   //       final String? userEmail = await authService.getUserId();
+
   //       if (userEmail != null) {
   //         try {
-  //           // Verificar si el personaje ya está en favoritos
-  //           final exists = await authService.existeJPersonajeFavorito(
-  //               userEmail, characterId);
-  //           print(exists);
-
+  //           await authService.favorito(userEmail, characterId);
   //           setState(() {
-  //             isFavorite = exists;
+  //             isFavorite = true;
   //           });
-
-  //           if (isFavorite) {
-  //             print('Quitando de favoritos');
-  //             await authService.eliminarPersonajeFavorito(
-  //                 userEmail, characterId);
-  //           } else if (!isFavorite) {
-  //             print('Agregando a favoritos');
-  //             await authService.agregarPersonajeFavorito(
-  //                 userEmail, characterId);
-  //           }
   //         } catch (e) {
-  //           print('Error al manejar la lista de favoritos: $e');
+  //           print('Error al agregar favorito: $e');
+  //         }
+  //       } else {
+  //         print('El email del usuario es nulo');
+  //       }
+  //     } else {
+  //       print('El ID del personaje es nulo');
+  //     }
+  //   } else {
+  //     print('Los argumentos no son de tipo Character');
+  //   }
+  // }
+
+  // void _removeFavorite() async {
+  //   final authService = Provider.of<AuthService>(context, listen: false);
+  //   final dynamic arguments = ModalRoute.of(context)!.settings.arguments;
+
+  //   if (arguments is pokecard) {
+  //     if (widget.card.id != null) {
+  //       final String characterId = widget.card.id!;
+  //       final String? userEmail = await authService.getUserId();
+
+  //       if (userEmail != null) {
+  //         try {
+  //           await authService.eliminarfavorito(userEmail, characterId);
+  //           setState(() {
+  //             isFavorite = false;
+  //           });
+  //         } catch (e) {
+  //           print('Error al eliminar favorito: $e');
   //         }
   //       } else {
   //         print('El email del usuario es nulo');

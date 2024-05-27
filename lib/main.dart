@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart'; // Importa el paquete services.dart
+import 'package:parse_server_sdk_flutter/parse_server_sdk_flutter.dart';
 
 import 'package:poketcg/models/card_model.dart';
 import 'package:poketcg/provider/card_provider.dart';
@@ -13,11 +14,18 @@ import 'package:poketcg/screens/login.dart';
 import 'package:poketcg/screens/registro.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp, // Bloquea la orientación en modo vertical
   ]);
+  final keyApplicationId = 'ZSaUfLy2KIr3mn21sNeCrySumFSXMSe4unw8RQLl';
+  final keyClientKey = 'amRaqqNIHNBFTzldEWVjSOoOROgkFj1oYBHC5sJQ';
+  final keyParseServerUrl = 'https://parseapi.back4app.com';
+
+  await Parse().initialize(keyApplicationId, keyParseServerUrl,
+      clientKey: keyClientKey, autoSendSessionId: true);
+
   runApp(AppState());
 }
 
