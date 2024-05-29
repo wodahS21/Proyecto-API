@@ -6,6 +6,7 @@ import 'package:poketcg/models/card_model.dart';
 import 'package:poketcg/provider/card_provider.dart';
 import 'package:poketcg/provider/login_form_provider.dart';
 import 'package:poketcg/screens/card_screen.dart';
+import 'package:poketcg/screens/favorites.dart';
 import 'package:poketcg/screens/home_screen.dart';
 import 'package:poketcg/Services/auth_services.dart';
 import 'package:poketcg/Services/notifications_services.dart';
@@ -67,6 +68,7 @@ class MyApp extends StatelessWidget {
           'register': (_) => RegistroPage(),
           'home': (_) => HomeScreen(),
           'checking': (_) => CheckAuthScreen(),
+          '/favorites': (_) => Favorites(),
         },
         scaffoldMessengerKey: NotificationsServices.messengerKey,
       ),

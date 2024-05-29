@@ -53,6 +53,31 @@ Future<List<FavoritesService>?> readFavorite(
   return null;
 }
 
+Future<List<FavoritesService>?> drawFavorite(AuthService authService) async {
+  final String? userEmail = await authService.getUserId();
+  try {
+    final query = QueryBuilder<ParseObject>(ParseObject('favoritos'))
+      ..whereEqualTo('UserName', userEmail);
+    final response = await query.query();
+    if (response.success &&
+        response.results != null &&
+        response.results!.isNotEmpty) {
+      return response.results?.map((a) {
+        return FavoritesService(
+          userName: a.get('UserName') ?? '',
+          cardId: a.get('CardId') ?? '',
+          fav: a.get('fav') ?? '',
+        );
+      }).toList();
+    } else {
+      print(response.error?.message);
+    }
+  } catch (e) {
+    print(e.toString());
+  }
+  return null;
+}
+
 Future<void> deleteFavorite(AuthService authService, String cardId) async {
   final String? userEmail = await authService.getUserId();
   try {

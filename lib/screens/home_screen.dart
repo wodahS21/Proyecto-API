@@ -3,6 +3,7 @@ import 'package:poketcg/provider/card_provider.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:poketcg/screens/card_screen.dart';
 import 'package:poketcg/Services/auth_services.dart';
+import 'package:poketcg/widgets/drawer.dart';
 import 'package:poketcg/widgets/musica.dart';
 import 'package:provider/provider.dart';
 
@@ -36,18 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Color.fromARGB(255, 219, 1, 1), // Rojo Profundo
 
         elevation: 0, // Quita la sombra de la AppBar
-        leading: IconButton(
-          icon: Icon(Icons.logout),
-          onPressed: () => _logout(context),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search), // Icono para mostrar la búsqueda
-            onPressed: () {
-              // Agrega la funcionalidad para realizar la búsqueda aquí
-            },
-          ),
-        ],
+        // leading: IconButton(
+        //   icon: Icon(Icons.logout),
+        //   onPressed: () => _logout(context),
+        // ),
         title: const Stack(
           children: [
             // Texto sombreado
@@ -88,6 +81,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: Image(image: AssetImage('assets/images/pikachu.gif')),
               ),
       ),
+      drawer: const DrawerHome(),
     );
   }
 }

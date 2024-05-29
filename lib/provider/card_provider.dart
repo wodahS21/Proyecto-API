@@ -13,4 +13,11 @@ class CardProvider with ChangeNotifier {
     cards.addAll(response.data!);
     notifyListeners();
   }
+
+  Future<void> getCardsid(String? cardId) async {
+    final result = await http.get(Uri.https(url, "/v2/cards/$cardId"));
+    final response = cardsResposeFromJson(result.body);
+    cards.addAll(response.data!);
+    notifyListeners();
+  }
 }
